@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+repo_url="https://raw.githubusercontent.com/github/gitignore/refs/heads/main/"
+
+# Fuzzy find the language from list of supported langs
+lang_selection=$(cat ~/github/getignore/.gi-langs | fzf)
+
+# No need to maintain whitespace here, hence no quotes
+if [[ -z $lang_selection ]]; then
+    echo "Invalid selection."
+    exit 0
+fi
+
+gitignore_url="${repo_url}${lang_selection}.gitignore"
+
+get_gitignore(){
+    # Make sure that at least one arg was passed
+    if [[  $# -ne 1 ]]; then
+        echo "ERROR: URL to raw gitignore must be passed"
+        return 1
+    fi
+
+    local url="$1"
+
+    # Downloads the file contents and names it .gitignore
+    # Must be raw URL for the gitignore
+    # -s makes curl silent
+    if ! $(curl -L -s -o ".gitignore" $url); then
+        echo "Error: Failed to get gitignore." >&2 # Pushes to stderr
+        return 1
+    fi
+}
+
+
+get_gitignore "$gitignore_url"
+ret_code="$?"
+
+# If we couldn't get the data, exit
+if [[ ret_code -eq 1 ]]; then
+    exit 0
+fi
