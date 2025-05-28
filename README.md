@@ -27,12 +27,11 @@ lang_selection=$(cat YOUR/PATH/HERE/.gi-langs | fzf)
 ```
 
 
-5. Add the script to your bin folder
+5. Add the script to your bin folder. There are other ways to make this
+   globally executable on your system, this is my preferred way.
 ```
 $ sudo cp getignore /usr/local/bin/
 ```
-   There are other ways to make this globally executable on your system, this is
-   my preferred way.
 
 6. After the you select language the gitignore will be downloaded to the
    directory you are currently in.
